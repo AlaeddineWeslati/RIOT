@@ -19,6 +19,10 @@ ifeq ($(CPU),stm32f407vgt6)
 	USEMODULE += stm32f4xxstdperi
 	UNDEF += $(BINDIR)syscalls.o
 endif
+ifeq ($(CPU),stm32f103rey6)
+	USEMODULE += stm32f10xstdperi
+	UNDEF += $(BINDIR)syscalls.o
+endif
 
 USEMODULE += cpu core sys
 ED = $(USEMODULE:%=-DMODULE_%)
