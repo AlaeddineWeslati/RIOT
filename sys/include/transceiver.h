@@ -27,10 +27,11 @@
 /**
  * @brief All supported transceivers
  */
-#define TRANSCEIVER_NONE    (0x0)       ///< Invalid
-#define TRANSCEIVER_CC1100  (0x01)      ///< CC110X transceivers
-#define TRANSCEIVER_CC1020  (0x02)      ///< CC1020 transceivers
-#define TRANSCEIVER_CC2420  (0x04)      ///< CC2420 transceivers
+#define TRANSCEIVER_NONE        (0x0)       ///< Invalid
+#define TRANSCEIVER_CC1100      (0x01)      ///< CC110X transceivers
+#define TRANSCEIVER_CC1020      (0x02)      ///< CC1020 transceivers
+#define TRANSCEIVER_CC2420      (0x04)      ///< CC2420 transceivers
+#define TRANSCEIVER_AT86RF231   (0x08)      ///< AT86RF231 transceivers
 
 /**
  * @brief Data type for transceiver specification
@@ -45,6 +46,7 @@ enum transceiver_msg_type_t {
     RCV_PKT_CC1020,        ///< packet was received by CC1020 transceiver
     RCV_PKT_CC1100,        ///< packet was received by CC1100 transceiver
     RCV_PKT_CC2420,        ///< packet was received by CC2420 transceiver
+    RCV_PKT_AT86RF231,     ///< packet was received by AT86RF231 transceiver
 
     /* Message types for transceiver <-> upper layer communication */
     PKT_PENDING,    ///< packet pending in transceiver buffer
