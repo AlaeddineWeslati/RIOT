@@ -111,6 +111,7 @@ void lowpan_init(ieee_802154_long_t *addr, uint8_t *data)
         lowpan_ipv6_set_dispatch(data);
     }
 
+
     /* check if packet needs to be fragmented */
     if (packet_length + header_size > PAYLOAD_SIZE - IEEE_802154_MAX_HDR_LEN) {
         uint8_t fragbuf[packet_length + header_size];
@@ -1509,10 +1510,15 @@ lowpan_context_t *lowpan_context_num_lookup(uint8_t num)
 
 void lowpan_context_auto_remove(void)
 {
-    timex_t minute = timex_set(60, 0);
+    /*timex_t minute = timex_set(60, 0);
     int i;
     int8_t to_remove[LOWPAN_CONTEXT_MAX];
     int8_t to_remove_size;
+*/
+    printf("ok\n");
+    while(1);
+
+ /*
 
     while (1) {
         vtimer_sleep(minute);
@@ -1530,7 +1536,7 @@ void lowpan_context_auto_remove(void)
         }
 
         mutex_unlock(&lowpan_context_mutex, 0);
-    }
+    }*/
 }
 
 void init_reas_bufs(lowpan_reas_buf_t *buf)
@@ -1598,12 +1604,16 @@ void sixlowpan_init(transceiver_type_t trans, uint8_t r_addr, int as_border)
                                        ipv6_process, "ip_process");
     }
 
-    nd_nbr_cache_rem_pid = thread_create(nc_buf, NC_STACKSIZE,
-                                         PRIORITY_MAIN - 1, CREATE_STACKTEST,
-                                         nbr_cache_auto_rem, "nbr_cache_rem");
-    contexts_rem_pid = thread_create(con_buf, CON_STACKSIZE,
-                                     PRIORITY_MAIN + 1, CREATE_STACKTEST,
-                                     lowpan_context_auto_remove, "lowpan_context_rem");
+    //nd_nbr_cache_rem_pid = thread_create(nc_buf, NC_STACKSIZE,
+    //                                     PRIORITY_MAIN - 1, CREATE_STACKTEST,
+ 
+    //contexts_rem_pid = thread_create(con_buf, CON_STACKSIZE,
+    //                                 PRIORITY_MAIN + 1, CREATE_STACKTEST,
+    //                                 lowpan_context_auto_remove, "lowpan_context_rem");
+    //printf("ok\n");
+    //while(1);
+
+ 
     transfer_pid = thread_create(lowpan_transfer_buf, LOWPAN_TRANSFER_BUF_STACKSIZE,
                                  PRIORITY_MAIN - 1, CREATE_STACKTEST,
                                  lowpan_transfer, "lowpan_transfer");
