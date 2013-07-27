@@ -42,6 +42,7 @@ void init_transport_layer(void)
                                        udp_packet_handler,"udp_packet_handler");
     set_udp_packet_handler_pid(udp_thread_pid);
 
+return;   // TODO : HACK : ALA
     /* TCP */
     timex_t now;
     vtimer_now(&now);

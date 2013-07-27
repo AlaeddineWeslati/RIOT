@@ -223,11 +223,11 @@ void send_ieee802154_frame(ieee_802154_long_t *addr, uint8_t *payload,
         p.dst = 0;
     }
 
-    memcpy(&buf[1], frame.payload, frame.payload_len); ;      // TODO : ALA : HACK
+    memcpy(&buf[1], frame.payload, frame.payload_len);      // TODO : ALA : HACK
     p.data = buf;
     msg_send_receive(&mesg, &transceiver_rsp, transceiver_pid);
 
-    hwtimer_wait(5000);
+    //hwtimer_wait(5000);
 }
 
 void sixlowmac_init(transceiver_type_t type)
