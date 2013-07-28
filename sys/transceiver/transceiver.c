@@ -67,14 +67,14 @@
 transceiver_type_t transceivers = TRANSCEIVER_NONE;
 
 /* registered upper layer threads */
-registered_t reg[TRANSCEIVER_MAX_REGISTERED];
+static registered_t reg[TRANSCEIVER_MAX_REGISTERED];
 
 /* packet buffers */
 radio_packet_t transceiver_buffer[TRANSCEIVER_BUFFER_SIZE];
 uint8_t data_buffer[TRANSCEIVER_BUFFER_SIZE *PAYLOAD_SIZE];
 
 /* message buffer */
-msg_t msg_buffer[TRANSCEIVER_MSG_BUFFER_SIZE];
+msg_t msg_buffer[TRANSCEIVER_MSG_BUFFER_SIZE*4];
 
 uint32_t response; ///< response bytes for messages to upper layer threads
 
@@ -384,7 +384,6 @@ static void receive_packet(uint16_t type, uint8_t pos)
             return;
         }
     }
-
     /* finally notify waiting upper layers
      * this is done non-blocking, so packets can get lost */
     i = 0;
@@ -474,7 +473,7 @@ void receive_at86rf231_packet(radio_packet_t *trans_p) {
     trans_p->dst = (uint16_t)((p.frame.dest_addr[1] << 8)| p.frame.dest_addr[0]);
     trans_p->rssi = p.rssi;
     trans_p->lqi = p.lqi;
-    trans_p->length = p.frame.payload_len;
+    trans_p->length = p.length;
     memcpy((void*) &(data_buffer[transceiver_buffer_pos * PAYLOAD_SIZE]), p.frame.payload, AT86RF231_MAX_DATA_LENGTH);
     eINT();
 

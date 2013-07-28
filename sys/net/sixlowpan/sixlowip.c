@@ -214,7 +214,7 @@ void ipv6_process(void)
         msg_receive(&m_recv_lowpan);
 
         ipv6_buf = (ipv6_hdr_t *)m_recv_lowpan.content.ptr;
-
+printf("IPV6\n");
         /* identifiy packet */
         nextheader = &ipv6_buf->nextheader;
 
@@ -257,7 +257,7 @@ void ipv6_process(void)
                     break;
                 }
 
-                case (IPPROTO_UDP): {
+                case (IPPROTO_UDP): { printf("UDP\n");
                     if (udp_packet_handler_pid != 0) {
                         m_send.content.ptr = (char *) ipv6_buf;
                         msg_send_receive(&m_send, &m_recv, udp_packet_handler_pid);

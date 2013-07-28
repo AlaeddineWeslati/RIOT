@@ -42,8 +42,16 @@ void at86rf231_rx_handler(void)
       return;
   }
 
-  read_802154_frame(&buf[1], &at86rf231_rx_buffer[rx_buffer_next].frame,
-                    at86rf231_rx_buffer[rx_buffer_next].length-2);
+  //read_802154_frame(&buf[1], &at86rf231_rx_buffer[rx_buffer_next].frame,
+   //                 at86rf231_rx_buffer[rx_buffer_next].length-2);
+  at86rf231_rx_buffer[rx_buffer_next].length -= 2;
+  at86rf231_rx_buffer[rx_buffer_next].frame.payload = buf+1;
+  //memcpy(&at86rf231_rx_buffer[rx_buffer_next].frame, &buf[1], at86rf231_rx_buffer[rx_buffer_next].length);
+
+     for (int i=0; i < at86rf231_rx_buffer[rx_buffer_next].length; i++)
+        printf("%0x ", at86rf231_rx_buffer[rx_buffer_next].frame.payload[i]);
+      printf("\n"); 
+
 
   if(at86rf231_rx_buffer[rx_buffer_next].frame.fcf.frame_type != 2) {
 #ifdef ENABLE_DEBUG

@@ -4,6 +4,7 @@
 #include <radio/types.h>
 
 /* Stack size for transceiver thread */
+#define TRANSCEIVER_STACK_SIZE      (2048*2)
 #ifndef TRANSCEIVER_STACK_SIZE
 #if ENABLE_DEBUG
 #define TRANSCEIVER_STACK_SIZE      (KERNEL_CONF_STACKSIZE_PRINTF)

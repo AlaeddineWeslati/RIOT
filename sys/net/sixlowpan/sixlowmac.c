@@ -135,6 +135,18 @@ void recv_ieee802154_frame(void)
         msg_receive(&m);
 
         if (m.type == PKT_PENDING) {
+            p = (radio_packet_t *) m.content.ptr;
+                 printf("Packet waiting, process %p...\n", p);
+
+      printf("\tLength:\t%u\n", p->length);
+      printf("\tSrc:\t%u\n", p->src);
+      printf("\tDst:\t%u\n", p->dst);
+      printf("\tLQI:\t%u\n", p->lqi);
+      printf("\tRSSI:\t%u\n", p->rssi);
+
+      for (int i=0; i < p->length; i++)
+        printf("%0x ", p->data[i]);
+      printf("\n"); 
 
             p = (radio_packet_t *) m.content.ptr;
             hdrlen = read_802154_frame(p->data, &frame, p->length);
@@ -200,6 +212,7 @@ void send_ieee802154_frame(ieee_802154_long_t *addr, uint8_t *payload,
 
     memcpy(&(frame.dest_addr[0]), &(addr->uint8[0]), 8);
     memcpy(&(frame.src_addr[0]), &(iface.laddr.uint8[0]), 8);
+
 
     daddr = HTONS(addr->uint16[3]);
     frame.payload = payload;

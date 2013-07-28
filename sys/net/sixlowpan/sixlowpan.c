@@ -251,6 +251,13 @@ void lowpan_transfer(void)
         if (current_buf != NULL) {
             mutex_unlock(&fifo_mutex, 0);
 
+            printf("LEN:%u", current_buf->current_packet_size);
+            printf("DISPATCH %u\n", (current_buf->packet)[0]);
+     for (int i = 0; i < current_buf->current_packet_size; i++) {
+      printf("%02x ", current_buf->packet[i]);
+     }
+     printf("\n");
+
             if ((current_buf->packet)[0] == LOWPAN_IPV6_DISPATCH) {
                 ipv6_buf = get_ipv6_buf();
                 memcpy(ipv6_buf, (current_buf->packet) + 1, current_buf->packet_size - 1);
@@ -258,7 +265,7 @@ void lowpan_transfer(void)
                 packet_length = current_buf->packet_size - 1;
                 msg_send_receive(&m_send, &m_recv, ip_process_pid);
             }
-            else if (((current_buf->packet)[0] & 0xe0) == LOWPAN_IPHC_DISPATCH) {
+            else if (((current_buf->packet)[0] & 0xe0) == LOWPAN_IPHC_DISPATCH) { printf("IPHC\n");
                 lowpan_iphc_decoding(current_buf->packet,
                                      current_buf->packet_size,
                                      &(current_buf->s_laddr),
