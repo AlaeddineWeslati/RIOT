@@ -1,5 +1,6 @@
 #include <at86rf231.h>
 #include <at86rf231_arch.h>
+#include "at86rf231_spi.h"
 
 static void at86rf231_xmit(uint8_t *data, uint8_t length);
 static void at86rf231_gen_pkt(uint8_t *buf, at86rf231_packet_t *packet);
@@ -50,6 +51,8 @@ int16_t at86rf231_send(at86rf231_packet_t *packet)
 
   // transmit packet
   at86rf231_xmit(pkt, packet->length-2);
+
+    return 0;
 }
 
 static void at86rf231_xmit(uint8_t *data, uint8_t length)

@@ -1,11 +1,12 @@
 
 #include <at86rf231.h>
 #include <at86rf231_arch.h>
+#include "at86rf231_spi.h"
 
 #include <transceiver.h>
 #include <msg.h>
 
-//#define ENABLE_DEBUG
+#define ENABLE_DEBUG    (0)
 #include <debug.h>
 
 at86rf231_packet_t at86rf231_rx_buffer[AT86RF231_RX_BUF_SIZE];

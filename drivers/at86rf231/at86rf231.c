@@ -6,9 +6,11 @@
   * Version 2.  See the file LICENSE for more details.
   */
   
-#include <at86rf231.h>
+#include "at86rf231.h"
+#include "at86rf231_spi.h"
+#include "at86rf231_arch.h"
 
-//#define ENABLE_DEBUG
+#define ENABLE_DEBUG    (0)
 #include <debug.h>
 
 static uint16_t radio_pan;
