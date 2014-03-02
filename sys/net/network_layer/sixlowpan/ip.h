@@ -54,8 +54,8 @@ extern int ip_process_pid;
 
 #define IPV6_NET_IF_ADDR_LIST_LEN   (10)    // maybe to much
 
-/* buffer */
-extern uint8_t buffer[BUFFER_SIZE];
+/* ip_recv_buffer */
+extern uint8_t ip_recv_buffer[BUFFER_SIZE];
 extern char ip_process_buf[IP_PROCESS_STACKSIZE];
 
 extern int sixlowip_reg[SIXLOWIP_MAX_REGISTERED];

@@ -141,12 +141,13 @@ typedef struct __attribute__((packed)) {
 } ndp_a6br_cache_t;
 
 ndp_default_router_list_t *ndp_default_router_list_search(ipv6_addr_t *ipaddr);
+void ndp_neighbor_cache_clear(void);
 uint8_t ndp_neighbor_cache_add(int if_id, const ipv6_addr_t *ipaddr,
                                const void *lladdr, uint8_t lladdr_len,
                                uint8_t isrouter, ndp_nce_state_t state,
                                ndp_nce_type_t type, uint16_t ltime);
 ndp_neighbor_cache_t *ndp_neighbor_cache_search(ipv6_addr_t *ipaddr);
-ndp_neighbor_cache_t *ndp_get_ll_address(ipv6_addr_t *ipaddr);
+ndp_neighbor_cache_t *ndp_get_ll_address(ipv6_addr_t *ipaddr, ipv6_hdr_t *packet);
 int ndp_addr_is_on_link(ipv6_addr_t *dest_addr);
 
 /**

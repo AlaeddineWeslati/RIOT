@@ -96,6 +96,18 @@
 
 #define PREFIX_BUF_LEN                  (NET_IF_MAX * OPT_PI_LIST_LEN)
 
+/**
+ * @brief Time in milliseconds ndp_get_ll_address() should wait for a neighbor
+ *        advertisement.
+ */
+#define NCE_UPDATE_TIME     (1000)  // TODO: maybe less
+
+/**
+ * @brief Number of times ndp_get_ll_address() retries to send a neighbor
+ *        solicitation.
+ */
+#define NCE_UPDATE_RETRIES  (3)
+
 /* extern variables */
 uint8_t ipv6_ext_hdr_len = 0;
 
@@ -171,72 +183,72 @@ int min(int a, int b)
 
 static icmpv6_parameter_prob_hdr_t *get_para_prob_buf(uint8_t ext_len)
 {
-    return ((icmpv6_parameter_prob_hdr_t *) &buffer[LLHDR_ICMPV6HDR_LEN + ext_len]);
+    return ((icmpv6_parameter_prob_hdr_t *) &ip_recv_buffer[LLHDR_ICMPV6HDR_LEN + ext_len]);
 }
 
 static icmpv6_echo_request_hdr_t *get_echo_req_buf(uint8_t ext_len)
 {
-    return ((icmpv6_echo_request_hdr_t *) &buffer[LLHDR_ICMPV6HDR_LEN + ext_len]);
+    return ((icmpv6_echo_request_hdr_t *) &ip_recv_buffer[LLHDR_ICMPV6HDR_LEN + ext_len]);
 }
 
 static icmpv6_echo_reply_hdr_t *get_echo_repl_buf(uint8_t ext_len)
 {
-    return ((icmpv6_echo_reply_hdr_t *) &buffer[LLHDR_ICMPV6HDR_LEN + ext_len]);
+    return ((icmpv6_echo_reply_hdr_t *) &ip_recv_buffer[LLHDR_ICMPV6HDR_LEN + ext_len]);
 }
 
 static icmpv6_router_adv_hdr_t *get_rtr_adv_buf(uint8_t ext_len)
 {
-    return ((icmpv6_router_adv_hdr_t *) &buffer[LLHDR_ICMPV6HDR_LEN + ext_len]);
+    return ((icmpv6_router_adv_hdr_t *) &ip_recv_buffer[LLHDR_ICMPV6HDR_LEN + ext_len]);
 }
 
 static icmpv6_neighbor_sol_hdr_t *get_nbr_sol_buf(uint8_t ext_len)
 {
-    return ((icmpv6_neighbor_sol_hdr_t *) &buffer[LLHDR_ICMPV6HDR_LEN + ext_len]);
+    return ((icmpv6_neighbor_sol_hdr_t *) &ip_recv_buffer[LLHDR_ICMPV6HDR_LEN + ext_len]);
 }
 
 static icmpv6_neighbor_adv_hdr_t *get_nbr_adv_buf(uint8_t ext_len)
 {
-    return ((icmpv6_neighbor_adv_hdr_t *) &buffer[LLHDR_ICMPV6HDR_LEN + ext_len]);
+    return ((icmpv6_neighbor_adv_hdr_t *) &ip_recv_buffer[LLHDR_ICMPV6HDR_LEN + ext_len]);
 }
 
 static icmpv6_ndp_opt_hdr_t *get_opt_buf(uint8_t ext_len, uint8_t opt_len)
 {
-    return ((icmpv6_ndp_opt_hdr_t *) &buffer[LLHDR_ICMPV6HDR_LEN + ext_len + opt_len]);
+    return ((icmpv6_ndp_opt_hdr_t *) &ip_recv_buffer[LLHDR_ICMPV6HDR_LEN + ext_len + opt_len]);
 }
 
 static icmpv6_ndp_opt_stllao_t *get_opt_stllao_buf(uint8_t ext_len, uint8_t opt_len)
 {
-    return ((icmpv6_ndp_opt_stllao_t *) &buffer[LLHDR_ICMPV6HDR_LEN + ext_len + opt_len]);
+    return ((icmpv6_ndp_opt_stllao_t *) &ip_recv_buffer[LLHDR_ICMPV6HDR_LEN + ext_len + opt_len]);
 }
 
 static icmpv6_ndp_opt_mtu_t *get_opt_mtu_buf(uint8_t ext_len, uint8_t opt_len)
 {
-    return ((icmpv6_ndp_opt_mtu_t *) &buffer[LLHDR_ICMPV6HDR_LEN + ext_len + opt_len]);
+    return ((icmpv6_ndp_opt_mtu_t *) &ip_recv_buffer[LLHDR_ICMPV6HDR_LEN + ext_len + opt_len]);
 }
 
 static icmpv6_ndp_opt_abro_t *get_opt_abro_buf(uint8_t ext_len, uint8_t opt_len)
 {
-    return ((icmpv6_ndp_opt_abro_t *) &buffer[LLHDR_ICMPV6HDR_LEN + ext_len + opt_len]);
+    return ((icmpv6_ndp_opt_abro_t *) &ip_recv_buffer[LLHDR_ICMPV6HDR_LEN + ext_len + opt_len]);
 }
 
 static icmpv6_ndp_opt_6co_hdr_t *get_opt_6co_hdr_buf(uint8_t ext_len, uint8_t opt_len)
 {
-    return ((icmpv6_ndp_opt_6co_hdr_t *) &buffer[LLHDR_ICMPV6HDR_LEN + ext_len + opt_len]);
+    return ((icmpv6_ndp_opt_6co_hdr_t *) &ip_recv_buffer[LLHDR_ICMPV6HDR_LEN + ext_len + opt_len]);
 }
 
 static uint8_t *get_opt_6co_prefix_buf(uint8_t ext_len, uint8_t opt_len)
 {
-    return ((uint8_t *) &buffer[LLHDR_ICMPV6HDR_LEN + ext_len + opt_len]);
+    return ((uint8_t *) &ip_recv_buffer[LLHDR_ICMPV6HDR_LEN + ext_len + opt_len]);
 }
 
 static icmpv6_ndp_opt_pi_t *get_opt_pi_buf(uint8_t ext_len, uint8_t opt_len)
 {
-    return ((icmpv6_ndp_opt_pi_t *) &buffer[LLHDR_ICMPV6HDR_LEN + ext_len + opt_len]);
+    return ((icmpv6_ndp_opt_pi_t *) &ip_recv_buffer[LLHDR_ICMPV6HDR_LEN + ext_len + opt_len]);
 }
 
 static icmpv6_ndp_opt_aro_t *get_opt_aro_buf(uint8_t ext_len, uint8_t opt_len)
 {
-    return ((icmpv6_ndp_opt_aro_t *) &buffer[LLHDR_ICMPV6HDR_LEN + ext_len + opt_len]);
+    return ((icmpv6_ndp_opt_aro_t *) &ip_recv_buffer[LLHDR_ICMPV6HDR_LEN + ext_len + opt_len]);
 }
 
 void icmpv6_send_echo_request(ipv6_addr_t *destaddr, uint16_t id, uint16_t seq, uint8_t *data, size_t data_len)
@@ -435,6 +447,8 @@ void recv_echo_repl(void)
 void recv_rtr_sol(void)
 {
     int if_id = 0;  // TODO, get this somehow
+    ipv6_addr_t *dest;
+
     icmpv6_opt_hdr_len = RTR_SOL_LEN;
     ipv6_buf = ipv6_get_buf();
 
@@ -482,12 +496,19 @@ void recv_rtr_sol(void)
         }
     }
 
-    /* send solicited router advertisment */
-    if (abr_count > 0) {
-        icmpv6_send_router_adv(&ipv6_buf->srcaddr, 0, 0, OPT_PI, OPT_6CO, OPT_ABRO);
+    if (ipv6_addr_is_unspecified(&ipv6_buf->srcaddr)) {
+        dest = NULL;
     }
     else {
-        icmpv6_send_router_adv(&ipv6_buf->srcaddr, 0, 0, OPT_PI, 0, 0);
+        dest = &ipv6_buf->srcaddr;
+    }
+
+    /* send solicited router advertisment */
+    if (abr_count > 0) {
+        icmpv6_send_router_adv(dest, 0, 0, OPT_PI, OPT_6CO, OPT_ABRO);
+    }
+    else {
+        icmpv6_send_router_adv(dest, 0, 0, OPT_PI, 0, 0);
     }
 }
 
@@ -1146,6 +1167,8 @@ void recv_nbr_sol(void)
                             }
                         }
                     }
+
+                    (void)aro_state;
                 }
 
                 break;
@@ -1503,14 +1526,44 @@ ndp_neighbor_cache_t *ndp_neighbor_cache_search(ipv6_addr_t *ipaddr)
     return NULL;
 }
 
-ndp_neighbor_cache_t *ndp_get_ll_address(ipv6_addr_t *ipaddr)
+void ndp_neighbor_cache_clear(void)
 {
-    ndp_neighbor_cache_t *nce = ndp_neighbor_cache_search(ipaddr);
+    memset(&nbr_cache[0], 0, sizeof (nbr_cache));
+}
+
+/* XXX: Just a quick hack until IPv6 buffer issue is fixed */
+uint8_t ndp_tmp_buffer[BUFFER_SIZE];
+
+ndp_neighbor_cache_t *ndp_get_ll_address(ipv6_addr_t *ip_addr,
+                                         ipv6_hdr_t *packet)
+{
+    ndp_neighbor_cache_t *nce = ndp_neighbor_cache_search(ip_addr);
 
     if (nce == NULL || nce->type == NDP_NCE_TYPE_GC ||
         nce->state == NDP_NCE_STATUS_INCOMPLETE) {
-        // TODO: send neighbor solicitation, wait, and recheck cache
-        return NULL;
+        ipv6_addr_t sol_nodes;
+        int count = 0;
+        timex_t wait_time = timex_set(0, NCE_UPDATE_TIME);
+        memcpy(ndp_tmp_buffer, packet, IPV6_HDR_LEN + NTOHS(packet->length));
+        ipv6_addr_set_solicited_node_addr(&sol_nodes, ip_addr);
+
+        while (count < NCE_UPDATE_RETRIES) {
+            icmpv6_send_neighbor_sol(NULL, &sol_nodes, ip_addr, OPT_SLLAO, 0);
+
+            if (vtimer_sleep(wait_time) < 0) {
+                return NULL;
+            }
+
+            nce = ndp_neighbor_cache_search(ip_addr);
+
+            if (nce && nce->type != NDP_NCE_TYPE_GC &&
+                nce->state != NDP_NCE_STATUS_INCOMPLETE) {
+                return nce;
+            }
+        }
+
+        memcpy(packet, ndp_tmp_buffer, IPV6_HDR_LEN + NTOHS(packet->length));
+
     }
 
     return nce;
