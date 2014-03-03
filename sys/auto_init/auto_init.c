@@ -60,11 +60,17 @@
 #endif
 
 #ifdef MODULE_NET_IF
+#include "cpu-conf.h"
+#include "cpu.h"
+#include "kernel.h"
 #include "net_if.h"
 #include "transceiver.h"
 #endif
 
 #define ENABLE_DEBUG (0)
+#if ENABLE_DEBUG
+#define DEBUG_ENABLED
+#endif
 #include "debug.h"
 
 #ifndef CONF_RADIO_ADDR
@@ -139,9 +145,40 @@ void auto_init(void)
     net_if_init();
 
     if (transceivers != 0) {
+        cpu_id_t cpuid;
+
         transceiver_init(transceivers);
         transceiver_start();
         iface = net_if_init_interface(0, transceivers);
+        GET_CPU_ID(cpuid);
+
+#ifdef CPU_ID_EUI64_START
+        net_if_eui64_t eui64;
+
+        if (sizeof(cpu_id_t) < sizeof(net_if_eui64_t)) {
+            memset(&eui64, 0xff, sizeof(net_if_eui64_t));
+        }
+
+        memcpy(&eui64, &cpuid.id[CPU_ID_EUI64_START], sizeof(cpu_id_t));
+        net_if_set_eui64(iface, &eui64);
+
+#ifdef DEBUG_ENABLED
+        DEBUG("Auto init radio long address on interface %d to ", iface);
+
+        for (size_t i = 0; i < 8; i++) {
+            printf("%02x ", eui64.uint8[i]);
+        }
+
+        DEBUG("\n");
+#endif
+#endif
+
+#ifdef CPU_ID_RADDR_START
+#undef CONF_RADIO_ADDR
+        uint16_t hwaddr = HTONS(*((uint16_t *)&cpuid.id[CPU_ID_RADDR_START]));
+        net_if_set_hardware_address(iface, hwaddr);
+        DEBUG("Auto init radio address on interface %d to 0x%04x\n", iface, hwaddr);
+#else
 
         if (net_if_set_src_address_mode(iface, NET_IF_TRANS_ADDR_M_SHORT)) {
             DEBUG("Auto init source address mode to short on interface %d\n",
@@ -158,6 +195,8 @@ void auto_init(void)
             DEBUG("Change this value at compile time with macro CONF_RADIO_ADDR\n");
             net_if_set_hardware_address(iface, CONF_RADIO_ADDR);
         }
+
+#endif
 
         if (net_if_get_pan_id(iface) <= 0) {
             DEBUG("Auto init PAN ID on interface %d to 0x%04x\n", iface, CONF_PAN_ID);
