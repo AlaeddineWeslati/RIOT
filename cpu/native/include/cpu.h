@@ -27,6 +27,10 @@
 /* TODO: choose better value? */
 #define F_CPU 1000000
 
+extern void native_cpu_id(unsigned char *id, int id_len);
+
+#define CPU_ID(id, id_len)  native_cpu_id(id, id_len)
+
 /* TODO: remove once these have been removed from RIOT: */
 void dINT(void);
 void eINT(void);

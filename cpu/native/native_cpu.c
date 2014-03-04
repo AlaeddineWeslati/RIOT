@@ -40,6 +40,7 @@
 #endif
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "kernel_internal.h"
 #include "kernel.h"
@@ -196,6 +197,14 @@ void thread_yield()
     else {
         isr_thread_yield();
     }
+}
+
+void native_cpu_id(unsigned char *id, int id_len)
+{
+    pid_t pid = getpid();
+
+    memset(id, 0, id_len);
+    memcpy(id, &pid, id_len > sizeof(pid_t) ? sizeof(pid_t) : id_len);
 }
 
 void native_cpu_init()
