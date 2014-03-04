@@ -93,5 +93,19 @@ extern config_t sysconfig;
  */
 NORETURN void reboot(void);
 
+/**
+ * @brief Returns the serial number of the CPU.
+ *
+ * @param[out] id           Pointer to a buffer where the serial number gets
+ *                          copied into, will be truncated if *id_len* is to
+ *                          short
+ * @param[in,out] id_len    Length of the CPU ID in bytes.
+ *
+ * @return  *id* on success, NULL if CPU does not defines the macros
+ *          CPU_ID_ADDR and CPU_ID_LEN or CPU_ID(*id*, *id_len*) and
+ *          CPU_ID_LEN.
+ */
+unsigned char *cpu_id(unsigned char *id, int *id_len);
+
 /** @} */
 #endif /* KERNEL_H_ */
