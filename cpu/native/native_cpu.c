@@ -199,12 +199,12 @@ void thread_yield()
     }
 }
 
-void native_cpu_id(unsigned char *id, int id_len)
+void native_cpu_id(cpu_id_t *id)
 {
     pid_t pid = getpid();
 
-    memset(id, 0, id_len);
-    memcpy(id, &pid, id_len > sizeof(pid_t) ? sizeof(pid_t) : id_len);
+    memset(id->id, 0xff, sizeof(long));     // Just in case pid_t is not long.
+    memcpy(id->id, &pid, sizeof(pid_t));
 }
 
 void native_cpu_init()

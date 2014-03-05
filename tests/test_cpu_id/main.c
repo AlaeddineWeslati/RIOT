@@ -1,27 +1,19 @@
 #include <stdio.h>
 
+#include "cpu-conf.h"
 #include "kernel.h"
 
 int main(void)
 {
-    unsigned char id[12], *res;
-    int id_len = 12;
+    cpu_id_t id;
 
-    res = cpu_id(id, &id_len);
+    GET_CPU_ID(id);
 
-    if (res == &id[0]) {
-        printf("CPU id is: ");
+    printf("CPU id is: ");
 
-        for (int i = 0; i < id_len; i++) {
-            printf("0x%02x ", id[i]);
-        }
-
-        printf("\n");
+    for (unsigned int i = 0; i < CPU_ID_LEN; i++) {
+        printf("0x%02x ", id.id[i]);
     }
-    else if (res == NULL) {
-        printf("No CPU id available.\n");
-    }
-    else {
-        printf("Unexpected behavior: result of cpu_id() != &id[0] or NULL\n");
-    }
+
+    printf("\n");
 }
