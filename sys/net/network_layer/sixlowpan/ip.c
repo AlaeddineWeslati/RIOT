@@ -81,6 +81,7 @@ int ipv6_send_packet(ipv6_hdr_t *packet)
         ndp_addr_is_on_link(&packet->destaddr)) {
         nce = ndp_get_ll_address(&packet->destaddr, packet);
 
+#if 0
         if (nce == NULL || sixlowpan_lowpan_sendto(nce->if_id, &nce->lladdr,
                 nce->lladdr_len,
                 (uint8_t *)packet,
@@ -92,6 +93,8 @@ int ipv6_send_packet(ipv6_hdr_t *packet)
             net_if_send_packet(0, 0, packet, length);
             /* return -1; */
         }
+#endif
+        net_if_send_packet(0, 0, packet, length);
 
         return length;
     }
@@ -100,8 +103,9 @@ int ipv6_send_packet(ipv6_hdr_t *packet)
         if (ipv6_addr_is_multicast(&packet->destaddr)) {
             /* if_id will be ignored */
             uint16_t addr = 0xffff;
-            return sixlowpan_lowpan_sendto(0, &addr, 2, (uint8_t *)packet,
-                                           length);
+            /* return sixlowpan_lowpan_sendto(0, &addr, 2, (uint8_t *)packet,
+                                           length);*/
+            return net_if_send_packet_broadcast(NET_IF_TRANS_ADDR_M_SHORT, (const void *)packet, length);
         }
 
         if (ip_get_next_hop == NULL) {
@@ -115,17 +119,19 @@ int ipv6_send_packet(ipv6_hdr_t *packet)
         }
 
         nce = ndp_get_ll_address(&packet->destaddr, packet);
-
+#if 0
         if (nce == NULL || sixlowpan_lowpan_sendto(nce->if_id, &nce->lladdr,
                 nce->lladdr_len,
                 (uint8_t *)packet, length) < 0) {
             /* XXX: this is wrong, but until ND does not work correctly,
              *      this is the only way (aka the old way)*/
             uint16_t raddr = NTOHS(packet->destaddr.uint16[7]);
-            sixlowpan_lowpan_sendto(0, &raddr, 2, (uint8_t *)packet, length);
+            /* sixlowpan_lowpan_sendto(0, &raddr, 2, (uint8_t *)packet, length); */
+            net_if_send_packet(0, 0, packet, length);
             /* return -1; */
         }
-
+#endif
+        net_if_send_packet(0, 0, packet, length);
         return length;
     }
 }
