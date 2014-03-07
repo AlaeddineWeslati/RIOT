@@ -55,7 +55,7 @@
 #define UART0_BUFSIZE                   (128)
 
 /* for nativenet */
-#define NATIVE_ETH_PROTO 0x1234
+#define NATIVE_ETH_PROTO 0x86dd
 
 #define CPU_ID_LEN                      (sizeof(long))
 #define CPU_ID_RADDR_START              (0)

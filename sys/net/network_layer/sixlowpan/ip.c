@@ -65,6 +65,8 @@ static uint8_t ipv6_net_if_addr_buffer_count = 0;
 
 static uint8_t default_hop_limit = MULTIHOP_HOPLIMIT;
 
+#include "nativenet.h"
+
 /* registered upper layer threads */
 int sixlowip_reg[SIXLOWIP_MAX_REGISTERED];
 
@@ -86,7 +88,8 @@ int ipv6_send_packet(ipv6_hdr_t *packet)
             /* XXX: this is wrong, but until ND does not work correctly,
              *      this is the only way (aka the old way)*/
             uint16_t raddr = NTOHS(packet->destaddr.uint16[7]);
-            sixlowpan_lowpan_sendto(0, &raddr, 2, (uint8_t *)packet, length);
+            /* sixlowpan_lowpan_sendto(0, &raddr, 2, (uint8_t *)packet, length); */
+            net_if_send_packet(0, 0, packet, length);
             /* return -1; */
         }
 

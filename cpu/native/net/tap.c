@@ -188,10 +188,10 @@ int _native_marshall_ethernet(uint8_t *framebuf, radio_packet_t *packet)
     f->field.header.ether_type = htons(NATIVE_ETH_PROTO);
 
     /* XXX: check overflow */
-    memcpy(f->field.payload.data, packet->data, packet->length);
-    f->field.payload.nn_header.length = htons(packet->length);
-    f->field.payload.nn_header.dst = htons(packet->dst);
-    f->field.payload.nn_header.src = htons(packet->src);
+    memcpy(&f->field.payload, packet->data, packet->length);
+    /* f->field.payload.nn_header.length = htons(packet->length); */
+    /* f->field.payload.nn_header.dst = htons(packet->dst); */
+    /* f->field.payload.nn_header.src = htons(packet->src); */
 
     data_len = packet->length + sizeof(struct nativenet_header);
 
