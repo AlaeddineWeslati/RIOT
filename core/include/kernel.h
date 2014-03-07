@@ -27,10 +27,26 @@
 #include "attributes.h"
 #include "config.h"
 #include "tcb.h"
-#include "cpu.h"
 #include "flags.h"
 #include "sched.h"
+
 #include "cpu-conf.h"
+
+#ifndef CPU_ID_LEN
+/**
+ * @brief Length of cpu_id_t type. Override in cpu-conf.h of CPU.
+ */
+#define CPU_ID_LEN  (2U)
+#endif
+
+/**
+ * @brief Data type to represent the CPU's unique serial number.
+ */
+typedef struct {
+    unsigned char id[CPU_ID_LEN];
+} cpu_id_t;
+
+#include "cpu.h"
 
 /**
  * @def KERNEL_CONF_STACKSIZE_DEFAULT
@@ -77,6 +93,15 @@
 
 #define LPM_PREVENT_SLEEP_UART    BIT2
 #define LPM_PREVENT_SLEEP_HWTIMER    BIT1
+
+#ifndef GET_CPU_ID
+/**
+ * @brief Macro to get CPU's unique serial number. Redefine in cpu.h.
+ *
+ * @param[out] id   A cpu_id_t variable that the CPU can fill.
+ */
+#define GET_CPU_ID(id)  for (int i = 0; i < CPU_ID_LEN; id.id[i] = 0xff, i++)
+#endif
 
 extern volatile int lpm_prevent_sleep;
 

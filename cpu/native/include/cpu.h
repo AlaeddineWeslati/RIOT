@@ -23,9 +23,15 @@
 #define _CPU_H
 
 #include "cpu-conf.h"
+#include "kernel.h"
 
 /* TODO: choose better value? */
 #define F_CPU 1000000
+
+extern void native_cpu_id(cpu_id_t *id);
+
+#undef GET_CPU_ID
+#define GET_CPU_ID(id)  native_cpu_id(&id)
 
 /* TODO: remove once these have been removed from RIOT: */
 void dINT(void);

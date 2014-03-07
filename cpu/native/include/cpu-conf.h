@@ -57,4 +57,6 @@
 /* for nativenet */
 #define NATIVE_ETH_PROTO 0x1234
 
+#define CPU_ID_LEN                      (sizeof(long))
+#define CPU_ID_RADDR_START              (0)
 #endif /* CPUCONF_H_ */
